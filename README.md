@@ -1,4 +1,4 @@
-## linux和macOS的安装
+## 	linux和macOS的安装
 
 ### 安装rustup
 
