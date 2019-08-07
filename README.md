@@ -1,20 +1,4 @@
-## 	linux和macOS的安装
+# 资料
 
-### 安装rustup
-
-```shell
-curl https://sh.rustup.rs -sSf | sh
-source $HOME/.cargo/env
-export PATH="$HOME/.cargo/bin:$PATH"
-```
-
-
-
-## 安装是否成功
-
-```shell
-rustc --version
-```
-
-
+1. [《The rust programming language》](https://doc.rust-lang.org/book/title-page.html)
 
