@@ -1,3 +1,65 @@
+use std::thread;
+macro_rules! say_hello {
+    () => (
+        println!("hello");
+    )
+}
+
+macro_rules! create_function {
+    ($func_name:ident) => (
+        fn $func_name() {
+            println!("You called {:?}()",stringify!($func_name));
+        }
+    )
+}
+
+macro_rules! print_result {
+    // This macro takes an expression of type `expr` and prints
+    // it as a string along with its result.
+    // The `expr` designator is used for expressions.
+    ($expression:expr) => (
+        // `stringify!` will convert the expression *as it is* into a string.
+        println!("{:?} = {:?}",
+                 stringify!($expression),
+                 $expression);
+    )
+}
+
+macro_rules! test {
+    // Arguments don't need to be separated by a comma.
+    // Any template can be used!
+    ($left:expr; and $right:expr) => (
+        println!("{:?} and {:?} is {:?}",
+                 stringify!($left),
+                 stringify!($right),
+                 $left && $right)
+    );
+    // ^ each arm must end with a semicolon.
+    ($left:expr; or $right:expr) => (
+        println!("{:?} or {:?} is {:?}",
+                 stringify!($left),
+                 stringify!($right),
+                 $left || $right)
+    );
+}
+
+macro_rules! find_min {
+    // Base case:
+    ($x:expr) => ($x);
+    // `$x` followed by at least one `$y,`
+    ($x:expr, $($y:expr),+) => (
+        // Call `find_min!` on the tail `$y`
+        std::cmp::min($x, find_min!($($y),+))
+    )
+}
+
+macro_rules! calculate{
+    () => {
+
+    }
+}
+
+
 fn main() {
     print_test();
     data_type_test();
@@ -15,8 +77,43 @@ fn main() {
         sign_in_count: 1,
     };
 
-    println!("{}",user1.email);
+    println!("{}", user1.email);
 
+    say_hello!();
+
+    create_function!(foo);
+    create_function!(bar);
+
+    print_result!(1u32 + 1);
+
+    // Recall that blocks are expressions too!
+    print_result!({
+        let x = 1u32;
+
+        x * x + 2 * x - 1
+    });
+
+    test!(1i32 + 1 == 2i32; and 2i32 * 2 == 4i32);
+    test!(true; or false);
+
+    println!("{}", find_min!(1u32));
+    println!("{}", find_min!(1u32 + 2 , 2u32));
+    println!("{}", find_min!(5u32, 2u32 * 3, 4u32));
+
+    // Make a vector to hold the children which are spawned.
+    let mut children = vec![];
+
+    for i in 0..10 {
+        // Spin up another thread
+        children.push(thread::spawn(move || {
+            println!("this is thread number {}", i);
+        }));
+    }
+
+    for child in children {
+        // Wait for the thread to finish. Returns a result.
+        let _ = child.join();
+    }
 }
 
 struct User {
@@ -26,12 +123,12 @@ struct User {
     active: bool,
 }
 
-fn control_flow_test(){
+fn control_flow_test() {
     let number = 3;
     if number < 5 {
         println!("condition was true");
     } else {
-        println!("condition was false");        
+        println!("condition was false");
     }
 
     let number = 6;
@@ -57,7 +154,7 @@ fn control_flow_test(){
 }
 
 
-fn loop_test(){
+fn loop_test() {
     let mut counter = 0;
 
     let result = loop {
@@ -71,7 +168,7 @@ fn loop_test(){
     println!("The result is {}", result);
 }
 
-fn while_test(){
+fn while_test() {
     let mut number = 3;
 
     while number != 0 {
@@ -109,7 +206,7 @@ fn while_test(){
 /**
  * print and format.
  */
-fn print_test(){
+fn print_test() {
     // In general, the `{}` will be automatically replaced with any
     // arguments. These will be stringified.
     println!("{} days", 31);
@@ -123,19 +220,19 @@ fn print_test(){
 
     // As can named arguments.
     println!("{subject} {verb} {object}",
-             object="the lazy dog",
-             subject="the quick brown fox",
-             verb="jumps over");
+             object = "the lazy dog",
+             subject = "the quick brown fox",
+             verb = "jumps over");
 
     // Special formatting can be specified after a `:`.
     println!("{} of {:b} people know binary, the other half doesn't", 1, 2);
 
     // You can right-align text with a specified width. This will output
     // "     1". 5 white spaces and a "1".
-    println!("{number:>width$}", number=1, width=6);
+    println!("{number:>width$}", number = 1, width = 6);
 
     // You can pad numbers with extra zeroes. This will output "000001".
-    println!("{number:>0width$}", number=1, width=6);
+    println!("{number:>0width$}", number = 1, width = 6);
 
     // It will even check to make sure the correct number of arguments are
     // used.
@@ -164,10 +261,9 @@ fn print_test(){
 
     // Use underscores to improve readability!
     println!("One million is written as {}", 1_000_000u32);
-
 }
 
-fn data_type_test(){
+fn data_type_test() {
     let x = 2.0; // f64
     let y: f32 = 3.0; // f32
 
@@ -187,12 +283,10 @@ fn data_type_test(){
     let one = x.2;
 
 
-
     let months = ["January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December"];
-    
-    let a: [i32; 5] = [1, 2, 3, 4, 5];
+        "August", "September", "October", "November", "December"];
 
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
 }
 
 fn another_function1() {
@@ -211,3 +305,14 @@ fn another_function3(x: i32, y: i32) {
 fn five() -> i32 {
     5
 }
+
+enum IpAddrKind {
+    v4,
+    v6,
+}
+
+
+
+
+
+
