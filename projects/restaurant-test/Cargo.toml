@@ -1,0 +1,8 @@
+[package]
+name = "restaurant-test"
+version = "0.1.0"
+authors = ["zhaoliang <weston_contribute@163.com>"]
+edition = "2018"
+
+[dependencies]
+restaurant = {path = "../restaurant"}
