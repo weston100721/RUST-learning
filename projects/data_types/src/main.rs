@@ -5,7 +5,6 @@
 fn main() {
     let guess: u32 = "22".parse().expect("not a number");
 
-
     let int1: i8 = 22;
 
     let double1 = 2.0; // f64
@@ -13,7 +12,6 @@ fn main() {
 
     let bool1 = false;
     let bo23: bool = true;
-
 
     let c = 'z';
     let z = 'ℤ';

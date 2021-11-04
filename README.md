@@ -6,7 +6,12 @@
 # 模块
 1. project/hello_world
 2. project/hello_cargo
-3. project
+3. project/variables
+4. project/data_types
+5. project/functions
+6. project/control_flow
+7. project/structs
+8. project/enums
 
 # 遇到的问题
 ### [Updating crates.io index 速度慢的解决办法](https://blog.csdn.net/rznice/article/details/112424406)
